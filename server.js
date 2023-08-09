@@ -1,13 +1,12 @@
 const express = require("express");
-const helmet= require("helmet");
+const helmet = require("helmet");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const {errors} = require("celebrate");
-// require("dotenv").config();
-const config= require('./config/config');
-const router= require('./routes');
+const { errors } = require("celebrate");
+const config = require("./config/config");
+const router = require("./routes");
 const app = express();
-const db= require('./config/db.config');
+const db = require("./config/db.config");
 var corsOptions = {
   origin: "*",
 };
@@ -23,9 +22,9 @@ app.get("/", (req, res) => {
 
 app.use("/api", router);
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   let error = new Error("Not Found");
-  error.status=404;
+  error.status = 404;
   next(error);
 });
 
