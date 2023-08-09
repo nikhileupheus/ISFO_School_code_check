@@ -1,5 +1,6 @@
 const db = require("../models/index");
 const config = require("../config/config");
+const sequelize = require("../config/db.config");
 
 const schoolCodeCheck = async (req, res) => {
   try {
@@ -29,6 +30,56 @@ const schoolCodeCheck = async (req, res) => {
 
 const createSchool = async (req, res) => {
   try {
+    const {
+      schoolCode,
+      amount,
+      schoolName,
+      schoolEmail,
+      schoolPhone,
+      schoolAddress,
+      city,
+      stateId,
+      pincode,
+      coordinatorName,
+      salesRepId,
+    } = req.body;
+    await sequelize.transaction(async (transactionInstance) => {
+      await db.school_codes.create(
+        {
+          amount: amount,
+          school_name: schoolName,
+          school_code: schoolCode,
+          city_name: city,
+          state_id: stateId,
+          sales_rep_id: salesRepId,
+          status: true,
+        },
+        { transaction: transactionInstance }
+      );
+      await db.school_address.create(
+        {
+          school_code: schoolCode,
+          state_code: stateId,
+          city,
+          pin: pincode,
+          address: schoolAddress,
+        },
+        { transaction: transactionInstance }
+      );
+      await db.school_contacts.create(
+        {
+          school_code: schoolCode,
+          person_name: coordinatorName,
+          person_email: schoolEmail,
+          person_phone: schoolPhone,
+          send_email: 1,
+        },
+        { transaction: transactionInstance }
+      );
+    });
+    return res
+      .status(200)
+      .json({ status: "success", message: "School created successfully" });
   } catch (err) {
     return res.status(500).json({
       status: "error",
@@ -40,10 +91,14 @@ const createSchool = async (req, res) => {
 const allSchools = async (req, res) => {
   try {
     const allSchools = await db.school_codes.findAll({
-        attributes:['id','amount','school_name','school_code'],
-        order:[['id','ASC']],
+      attributes: ["id", "amount", "school_name", "school_code"],
+      order: [["id", "ASC"]],
     });
-    return res.status(200).json({status:'success',message:'All Schools',data:{allSchools}});
+    return res.status(200).json({
+      status: "success",
+      message: "All Schools",
+      data: { allSchools },
+    });
   } catch (err) {
     return res.status(500).json({
       status: "error",
