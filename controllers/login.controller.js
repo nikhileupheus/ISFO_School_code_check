@@ -27,6 +27,7 @@ const login = async (req, res) => {
     });
     user.token = token;
     await user.save();
+    user.password=null;
     return res.status(200).json({
       status: "success",
       message: "Login Successfull",
