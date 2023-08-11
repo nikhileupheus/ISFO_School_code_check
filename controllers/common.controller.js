@@ -1,8 +1,10 @@
 const db = require("../models/index");
 const config = require("../config/config");
+const logger = require('../helpers/logger');
 
 const states = async (req, res) => {
   try {
+    logger.info('common.controller=>states');
     const states = await db.states.findAll({
       attributes: ["id", "state"],
       order: [["state", "ASC"]],
@@ -15,6 +17,7 @@ const states = async (req, res) => {
       .status(200)
       .json({ status: "success", message: "All States", data: { states } });
   } catch (err) {
+    logger.error(err);
     return res.status(500).json({
       status: "error",
       message: "Internal Server Error",
@@ -25,6 +28,7 @@ const states = async (req, res) => {
 
 const salesReps = async (req, res) => {
   try {
+    logger.info('common.controller=>salesReps');
     const salesReps = await db.sales_reps.findAll({
       attributes: ["id", "f_name", "l_name"],
     });
@@ -36,6 +40,7 @@ const salesReps = async (req, res) => {
         data: { salesReps },
       });
   } catch (err) {
+    logger.error(err);
     return res.status(500).json({
       status: "error",
       message: "Internal Server Error",

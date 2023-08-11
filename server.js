@@ -5,6 +5,7 @@ const cors = require("cors");
 const { errors } = require("celebrate");
 const config = require("./config/config");
 const router = require("./routes");
+const logger= require('./helpers/logger');
 const app = express();
 const db = require("./config/db.config");
 var corsOptions = {
@@ -31,5 +32,5 @@ app.use(function (req, res, next) {
 app.use(errors());
 
 app.listen(config.port, () => {
-  console.log(`Server listening at port ${config.port}`);
+  logger.info(`Server listening at port ${config.port}`);
 });

@@ -1,9 +1,11 @@
 const db = require("../models/index");
 const config = require("../config/config");
 const sequelize = require("../config/db.config");
+const logger = require('../helpers/logger');
 
 const schoolCodeCheck = async (req, res) => {
   try {
+    logger.info('school.controller=>schoolCodeCheck');
     const { schoolCode } = req.body;
     const isExisting = await db.school_codes.count({
       where: {
@@ -20,6 +22,7 @@ const schoolCodeCheck = async (req, res) => {
       .status(200)
       .json({ status: "success", message: "School code is valid" });
   } catch (err) {
+    logger.error(err);
     return res.status(500).json({
       status: "error",
       message: "Internal Server Error",
@@ -30,6 +33,7 @@ const schoolCodeCheck = async (req, res) => {
 
 const createSchool = async (req, res) => {
   try {
+    logger.info('school.controller=>createSchool');
     const {
       schoolCode,
       amount,
@@ -81,6 +85,7 @@ const createSchool = async (req, res) => {
       .status(200)
       .json({ status: "success", message: "School created successfully" });
   } catch (err) {
+    logger.error(err);
     return res.status(500).json({
       status: "error",
       message: "Internal Server Error",
@@ -90,6 +95,7 @@ const createSchool = async (req, res) => {
 };
 const allSchools = async (req, res) => {
   try {
+    logger.info('school.controller=>allSchools');
     const allSchools = await db.school_codes.findAll({
       attributes: ["id", "amount", "school_name", "school_code"],
       order: [["id", "ASC"]],
@@ -100,6 +106,7 @@ const allSchools = async (req, res) => {
       data: { allSchools },
     });
   } catch (err) {
+    logger.error(err);
     return res.status(500).json({
       status: "error",
       message: "Internal Server Error",

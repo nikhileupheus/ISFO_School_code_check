@@ -2,9 +2,11 @@ const db = require("../models/index");
 const config = require("../config/config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const logger = require('../helpers/logger');
 
 const login = async (req, res) => {
   try {
+    logger.info('login.controller=>login');
     const { email, password } = req.body;
     const user = await db.users.findOne({
       where: {
@@ -34,6 +36,7 @@ const login = async (req, res) => {
       data: { user },
     });
   } catch (err) {
+    logger.error(err);
     return res
       .status(500)
       .json({

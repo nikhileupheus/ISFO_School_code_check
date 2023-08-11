@@ -6,7 +6,7 @@ const secrets={
     dbDialect: process.env.DB_DIALECT || 'mysql',
     dbHost: process.env.DB_HOST,
 
-    jwtSecret:'eupheusISFO',
+    jwtSecret:process.env.JWT_KEY,
     jwtExpiry:'1d',
 };
 
