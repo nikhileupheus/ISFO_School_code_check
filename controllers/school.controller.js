@@ -53,9 +53,22 @@ const createSchool = async (req, res) => {
       },
     });
     if (isExisting !== 0) {
-      return res.status(401).json({
+      return res.status(409).json({
         status: "error",
         message: "School code already exists",
+      });
+    }
+    const isExistingSchool = await db.school_codes.findOne({
+      where: {
+        school_name: schoolName,
+        city_name: city,
+        state_id:stateId
+      },
+    });
+    if (isExistingSchool) {
+      return res.status(409).json({
+        status: "error",
+        message: `School already exists with code ${isExistingSchool.school_code}`,
       });
     }
     await sequelize.transaction(async (transactionInstance) => {
