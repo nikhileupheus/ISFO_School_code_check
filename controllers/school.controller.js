@@ -47,6 +47,17 @@ const createSchool = async (req, res) => {
       coordinatorName,
       salesRepId,
     } = req.body;
+    const isExisting = await db.school_codes.count({
+      where: {
+        school_code: schoolCode,
+      },
+    });
+    if (isExisting !== 0) {
+      return res.status(401).json({
+        status: "error",
+        message: "School code already exists",
+      });
+    }
     await sequelize.transaction(async (transactionInstance) => {
       await db.school_codes.create(
         {
