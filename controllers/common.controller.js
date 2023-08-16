@@ -31,6 +31,9 @@ const salesReps = async (req, res) => {
     logger.info('common.controller=>salesReps');
     const salesReps = await db.sales_reps.findAll({
       attributes: ["id", "f_name", "l_name"],
+      where:{
+        status:1
+      }
     });
     return res
       .status(200)
